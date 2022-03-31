@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Les 2 test</title>
+</head>
+
+
+<body>
+  <p id="bienvenue"></p>
+  <p id="record"></p>
+  <p id="vies"></p>
+  <p id="score"></p>
+
+  <p oncopy="return false" id="num1">X</p>
+  <p id="num2">Y</p>
+
+  
+
+<div id="conteneur">
+  <input type="number" placeholder="resultat" id="res" />
+  <button id="start">start</button>
+  <button id="efface">efface record</button>
+  <button id="prochain">prochain test</button>
+</div>
+   
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+p {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 3vh;
+      text-align: center;}
+
+body {background:linear-gradient(60deg, rgb(0, 0, 0), rgb(176, 196, 222), rgb(0, 191, 255));
+            background-size: 500% 500%;
+            animation: gradient 12s ease infinite;
+            height: 100vh}
+@keyframes gradient{
+            0%{
+                background-position:0% 50%;
+            }
+            50%{
+                background-position:100% 50%;
+            }
+            100%{
+                background-position:0% 50%
+            }
+        }}
+
+
+#bienvenue {color: black;}
+#record {color: blue;}
+#vies {color: green;}
+#score {color: darkslategrey;}
+#res {align-item: center;
+justify-content: center;
+  border-radius: 12px;
+  height: 8vh;
+  font-family: 'Permanent Marker', cursive;
+  color: grey;
+  text-align: center;
+font-size: 3vh}
+#efface {align-content: right;}
+#conteneur {display: flex;
+                flex-direction: column;}
+
+
+
+
+button  {
+justify-content: center;
+font-size: 3vh;
+  border-radius: 12px;
+  font-family: 'Permanent Marker', cursive;
+  color: grey;
+  background:linear-gradient(60deg, rgb(25, 25, 112),  rgb(30, 144, 255), rgb(0, 0, 128));
+            background-size: 500% 500%;
+            animation: gradient 8s ease infinite;
+            height: 8vh
+}
+
+
+ }
+ 
+
+</style>
+
+
+
+<script type="text/javascript">
+ 
+var nom=prompt("Comment tu t'appelles? Pour me rappeller de tes record...")
+var temps= 5000
+var vies=3
+var scorejs=0
+var recordjs=0
+document.getElementById("bienvenue").innerHTML="salut "+nom
+
+if(window.localStorage.getItem(nom)) {var recordjs=window.localStorage.getItem(nom).split(",")[0];} else { recordjs=0;}//mémoire records précedents?
+document.getElementById("record").innerHTML="ton record est "+recordjs //chargement éventuel record
+document.getElementById("score").innerHTML="ton score est "+scorejs;
+document.getElementById("vies").innerHTML="t'as encore "+vies+" vies";
+
+setTimeout(() => alert("Somme les chiffres qui vont comparaître au lieu de X et Y, écris le résultat dans la case 'résultat' et attend. Les chiffres vont changer à chaque fois plus rapidement"), 250)
+
+
+function generateur() {
+  document.getElementById("vies").innerHTML="t'as encore "+vies+" vies";
+  document.getElementById("num1").innerHTML=(Math.floor(Math.random() * 10)) 
+  document.getElementById("num2").innerHTML=(Math.floor(Math.random() * 10))
+  setTimeout(() => controle(), temps)
+}
+
+function controle() {
+  if(parseInt(document.getElementById("res").value)==parseInt(document.getElementById("num1").textContent)+parseInt(document.getElementById("num2").textContent)) 
+    { scorejs=scorejs+1; document.getElementById("score").innerHTML="ton score est "+scorejs; 
+        if(window.localStorage.getItem(nom)==null)  {window.localStorage.setItem(nom, recordjs)}; if(window.localStorage.getItem(nom).includes(",")) {let p=recordjs.toString().length+1; window.localStorage.setItem(nom, recordjs+","+window.localStorage.getItem(nom)[p])} else {window.localStorage.setItem(nom, recordjs)};  if(scorejs>recordjs){recordjs=scorejs};  document.getElementById("record").innerHTML="ton record est "+recordjs;document.getElementById("res").value=(""); if(temps>1500) {temps=temps-250}; console.log(temps); generateur()} 
+  else if(vies==0) {if(window.localStorage.getItem(nom)==null) {recordjs=0; window.localStorage.setItem(nom, recordjs)}; if(window.localStorage.getItem(nom).includes(",")) {let p=recordjs.toString().length+1; window.localStorage.setItem(nom, recordjs+","+window.localStorage.getItem(nom)[p])} else {window.localStorage.setItem(nom, recordjs)}; alert("t'as perdu")} 
+  else {vies=vies-1; document.getElementById("res").value=(""); document.getElementById("vies").innerHTML=vies; generateur()} //verifie si resultat ok; relance generateur, efface resultatat..
+           }
+
+start.addEventListener("click", startJeuSomma)
+function startJeuSomma() {vies=3; scorejs=0; temps=5000; document.getElementById("score").innerHTML="ton score est "+scorejs; generateur()}
+efface.addEventListener("click",()=> { window.localStorage.removeItem(nom); recordjs=0; document.getElementById("record").innerHTML="ton record est "+recordjs})
+
+
+
+
+
+
+
+
+//secondo Jeu: Memoire
+
+var scorejsMemoire=0
+var longueur=1000
+var numeroAControler=0 //numero tra 0 e longueur
+var numeroDef=0
+var attente=" secondes pour le re-écrire"
+var recordjsMemoire=0
+var tempsMemoire=8000
+var prox= 0
+
+function numeroDeff(){numeroAControler=(Math.floor(Math.random() * longueur)); if (numeroAControler > longueur/10) { numeroDef= numeroAControler; document.getElementById("num1").innerHTML=numeroDef; } else{numeroAControler=numeroAControler*10; numeroDeff() }}
+
+function Memoire() {if(window.localStorage.getItem(nom).includes(",")) { p=recordjs.toString().length+1; recordjsMemoire=window.localStorage.getItem(nom)[p];} else {recordjsMemoire=0};//Memoire
+document.getElementById("record").innerHTML="ton record mémoire est "+recordjsMemoire}
+
+prochain.addEventListener("click", prochainf) 
+
+function prochainf() {if((vies>0)||(prox==1)) { alert("Le 1er test n'est encore pas terminé")} else{Memoire(); document.getElementById("record").innerHTML="ton record Mémoire est "+recordjsMemoire; resetGraficaMemoire()}}
+
+function resetGraficaMemoire() {start.removeEventListener("click", startJeuSomma); document.getElementById("num2").innerHTML=""; document.getElementById("num1").innerHTML="X"; document.getElementById("vies").innerHTML=""; document.getElementById("score").innerHTML="ton score Memoire est "+scorejsMemoire; setTimeout(() =>alert("Mémorise le numéro qui va apparaître au lieu de X et, quand la case résultat va comparaître, écris le numero que t'as retenu et attend"), 250); }
+
+start.addEventListener("click", startJeuMemoire)
+
+function startJeuMemoire() {if (vies==0) { prox=1; scorejsMemoire=0; longueur=1000; document.getElementById("record").innerHTML="ton record Memoire est "+recordjsMemoire;document.getElementById("score").innerHTML="ton score Memoire est "+scorejsMemoire; if(window.localStorage.getItem(nom).includes(",")) { p=recordjs.toString().length+1; recordjsMemoire=window.localStorage.getItem(nom)[p]; document.getElementById("record").innerHTML="ton record Memoire est "+recordjsMemoire}; generateurMemoire()}}
+
+function generateurMemoire() {if (vies==0) {document.getElementById("res").style.visibility = "hidden"; numeroDeff(); document.getElementById("num1").innerHTML=numeroDef; setTimeout(() => {document.getElementById("res").style.visibility = "visible"; document.getElementById("num1").innerHTML=tempsMemoire/1000+attente}, tempsMemoire) ; setTimeout(() => controleMemoire(), 2*tempsMemoire) }}
+
+
+function controleMemoire() { if(numeroDef==document.getElementById("res").value){tempsMemoire=longueur.toString().length*2000;scorejsMemoire++; document.getElementById("score").innerHTML="ton score Mémoire est"+scorejsMemoire; p=recordjs.toString().length+1;  if(scorejsMemoire>recordjsMemoire) {recordjsMemoire=scorejsMemoire;  window.localStorage.setItem(nom, recordjs+","+recordjsMemoire)}; document.getElementById("record").innerHTML="ton record mémoire est "+recordjsMemoire;document.getElementById("score").innerHTML="ton score Mémoire est "+scorejsMemoire; longueur=longueur*10; document.getElementById("res").value=(""); generateurMemoire() } else{ alert("t'as perdu"); prox=0; document.getElementById("prochain").innerHTML="Regarde les résultats"; prochain.removeEventListener("click", prochainf); prochain.addEventListener("click", regardeRes) }}
+
+function regardeRes() {alert("Le score obtenu dans le 1er jeu est "+scorejs+" , le score du 2eme est "+scorejsMemoire)}
+
+</script>
